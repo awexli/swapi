@@ -1,24 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import NavBar from './components/nav-bar';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './components/home';
+import People from './components/people';
+import Planets from './components/planets';
+import { ApiService } from './api-service';
 
 function App() {
+  const [people, setPeople] = useState([]);
+  const [planets, setPlanets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadApi() {
+      try {
+        setPeople(await ApiService.fetchPeople());
+        setPlanets(await ApiService.fetchPlanets());
+      } catch (error) {
+        alert(error);
+      }
+      setLoading(false);
+    }
+
+    loadApi();
+  }, []);
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <NavBar></NavBar>
+        <div>
+          {loading ? (
+            <h1>Loading...</h1>
+          ) : (
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route exact path="/people">
+                <People people={people}/>
+              </Route>
+              <Route exact path="/planets">
+                <Planets planets={planets} />
+              </Route>
+            </Switch>
+          )}
+        </div>
+      </Router>
     </div>
   );
 }

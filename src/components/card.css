@@ -1,0 +1,23 @@
+.card__container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card__main {
+  border: solid 1px black;
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+}
+
+.card__main p {
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.card__main span {
+  font-weight: bold;
+}
